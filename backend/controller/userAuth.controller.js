@@ -75,17 +75,25 @@ export const userSignin= async (req, res) => {
                 message: "Invalid password"
             });
         }
-        genratejwt(user._id, res);
+        const token=genratejwt(user._id);
+         res.cookie("jwt",token,{
+            maxAge:2*24*60*60*1000,
+            httpOnly:true,
+            sameSite:"strict",
+            secure:process.env.NODE_ENV !=="development"
+
+        })
         console.log("user signed in successfully");
          // Set the cookie with the JWT token
         return res.status(200).json({
             message: "User signed in successfully",
+            token,
             user: {
                 id: user._id,
                 username: user.username,
                 email: user.email
             }
-        });
+        }); 
     } catch (error) {
         console.log("error in signin function", error.message);
         res.status(500).json({

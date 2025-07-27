@@ -1,4 +1,3 @@
-import e from "express";
 import { userSignup ,userSignin,userlogout,check} from "../controller/userAuth.controller.js";
 import express from "express";
 import { protectRoute } from "../middleware/auth.middleware.js";
