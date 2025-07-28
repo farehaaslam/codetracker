@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Play, Chrome, Target, BarChart3, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+import { Link, Navigate } from 'react-router-dom';
 
 // Utility function
 const utils = {
@@ -134,9 +135,12 @@ const Navbar = ({ logoText, navLinks, onMenuToggle, isMobileMenuOpen }) => {
 
           {/* Desktop Auth */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm" className="text-white  hover:text-indigo-600">
+            <Link to='/signin'> 
+            <Button variant="ghost" size="sm" className="text-white  hover:text-indigo-600" >
               Login
             </Button>
+             </Link>
+            
           </div>
 
           {/* Mobile Menu Button */}
@@ -162,9 +166,11 @@ const Navbar = ({ logoText, navLinks, onMenuToggle, isMobileMenuOpen }) => {
                 </a>
               ))}
               <div className="pt-4 border-t border-border">
-                <Button variant="ghost" size="sm" className="w-full justify-start">
-                  Login
-                </Button>
+                <Link to='/signin'>
+                <Button variant="ghost" size="sm" className="w-full justify-start" >Login</Button>
+                </Link>
+                
+                 
               </div>
             </div>
           </div>
@@ -295,8 +301,8 @@ const CodeTrackerHero = ({
   ],
   headline = "Stay Consistent. Track Your Coding Journey, Automatically.",
   subheadline = "CodeTracker Pro helps you set daily goals and auto-track submissions from platforms like LeetCode — so you can stay accountable.",
-  primaryCtaText = "Get Started Free",
-  primaryCtaLink = "#signup",
+  primaryCtaText = "Get Started ",
+  primaryCtaLink = "/signup",
   secondaryCtaText = "Download Extension",
   secondaryCtaLink = "https://chrome.google.com/webstore",
 }) => {

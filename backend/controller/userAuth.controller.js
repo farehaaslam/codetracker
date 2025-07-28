@@ -31,6 +31,7 @@ export const userSignup = async (req, res) => {
         if(newUser){
             genratejwt(newUser)
             await newUser.save();
+            console.log("User created successfully");
             return res.status(201).json({
                 message: "User created successfully",
                 user: {
