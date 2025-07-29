@@ -344,16 +344,16 @@ const CodeTrackerHero = ({
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"> 
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white shadow-lg"
                 asChild
               >
-                <a href={primaryCtaLink}>
+                <Link to="/signup">
                   <Play className="mr-2 h-5 w-5" />
-                  {primaryCtaText}
-                </a>
+                  Getting Started
+                </Link>
               </Button>
               <Button 
                 variant="outline" 
