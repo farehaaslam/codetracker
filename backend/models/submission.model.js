@@ -23,7 +23,7 @@ questionLink: {
   topic: {
     type: String
 },
-diffculty: {
+difficulty: {
     type: String,
 }},
 {

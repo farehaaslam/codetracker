@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import 'dotenv/config'
 import startserver from "./db.js"   
 import userRouter from "./routes/user.routes.js";
+import submissionRouter from "./routes/submission.routes.js";
 const PORT = process.env.PORT || 5000;  
 const app = express();
 app.use(cors({
@@ -16,4 +17,5 @@ app.use(express.urlencoded({ extended: true , limit: '10mb' }));
 
 app.use(cookieParser());
 app.use("/api/user", userRouter);
+app.use("/api/submission", submissionRouter); // Assuming you have a submission router
 startserver(app, PORT);
