@@ -77,7 +77,7 @@ const NavBar =( ) => {
   const navItems = [
     { name: 'Dashboard', url: '/dashboard', icon: Home },
     { name: 'Setting', url: '/profile', icon: User },
-    { name: 'Extension', url: '#', icon: Briefcase },
+    { name: 'Submission', url: '/submission', icon: Briefcase },
     { name: 'Logout', url: '#', icon: FileText }
   ]
 

@@ -10,6 +10,7 @@ import  NavBar from './components/section/Navbar.jsx'
 import Layout from './Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Profile from './pages/Profile.jsx'
+import SubmissionsDashboard from './pages/Submission.jsx'
 function App() {
 const {checkAuth,authUser,isCheckingAuth}= useAuthStore()
 
@@ -24,6 +25,7 @@ console.log("Auth User:", authUser);
         <Route path='/' element={!authUser?<CodeTrackerHero />:<Layout/>} > 
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="submission" element={<SubmissionsDashboard />} />
         </Route>
         <Route path='/signin' element={!authUser ?<Signin/>:<Navigate to="/"/>}/>
         <Route path='/signup' element={!authUser?<Signup/>:<Navigate to="/"/>}/>

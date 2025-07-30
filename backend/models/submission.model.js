@@ -21,8 +21,9 @@ questionLink: {
     type: String,
   },
   topic: {
-    type: String
-},
+    type: [String], 
+    default: []
+  },
 difficulty: {
     type: String,
 }},
