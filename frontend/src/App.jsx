@@ -20,7 +20,7 @@ useEffect(() => {
 
 console.log("Auth User:", authUser);
   return (
-    < div className='dark'>
+    < div className='dark min-h-screen'>
       <Routes>
         <Route path='/' element={!authUser?<CodeTrackerHero />:<Layout/>} > 
         <Route path="dashboard" element={<Dashboard />} />

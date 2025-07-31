@@ -230,7 +230,7 @@ export default function SubmissionsDashboard() {
     <div className="min-h-screen text-white  ">
       <div className="mx-auto max-w-7xl p-4 md:p-6 mt-[100px] flex gap-[25px] flex-col">
         {/* Header */}
-        {/* <SubHeader /> */}
+        <SubHeader />
 
         {/* Filter Panel */}
         <Card className="bg-gray-900/50 border-gray-800">

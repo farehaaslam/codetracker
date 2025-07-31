@@ -177,7 +177,82 @@ export const searchSubmissions = async (req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
+export const getMonthlySubmissionCounts = async (req, res) => {
+  const userId = req.user._id;
 
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth(); // 0-indexed
+  const firstDayOfMonth = new Date(year, month, 1);
+  const firstDayOfNextMonth = new Date(year, month + 1, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+  try {
+    // Aggregate submissions grouped by date
+    const submissions = await Submission.aggregate([
+      {
+        $match: {
+          userId,
+          createdAt: {
+            $gte: firstDayOfMonth,
+            $lt: firstDayOfNextMonth,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          date: "$_id",
+          count: 1,
+        },
+      },
+      { $sort: { date: 1 } },
+    ]);
 
+    // Fill missing dates with count: 0
+    const countMap = new Map(submissions.map(item => [item.date, item.count]));
 
+    const allDates = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day).toISOString().split("T")[0];
+      allDates.push({
+        date,
+        count: countMap.get(date) || 0,
+      });
+    }
+
+    return res.status(200).json(allDates);
+  } catch (error) {
+    console.error("Error fetching monthly submission counts:", error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+export const getMonthlyPlatformCounts = async (req, res) => {
+    const userId = req.user._id;
+
+    try {
+        const platformCounts = await Submission.aggregate([
+            { $match: { userId } },
+            {
+                $group: {
+                    _id: "$platform",
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { count: -1 } }
+        ]);
+
+        return res.status(200).json(platformCounts);
+    } catch (error) {
+        console.error("Error fetching monthly platform counts:", error.message);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
