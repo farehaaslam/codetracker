@@ -29,6 +29,7 @@ export const useSubmissionStore = create((set) => ({
         set({setIsCreateModalOpen: true});
 
         set({ isCreating: true });
+        console.log(formData)
         try {
             const res = await axiosInstance.post("/submission/create", formData);
             console.log("Created submission:", res.data);

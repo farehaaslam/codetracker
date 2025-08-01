@@ -1,5 +1,5 @@
 import express from "express";
-import { createSubmission, deleteSubmission, editSubmission, filterSubmissions, getAllSubmissions, getTodaySubmissions, getSubmissionById, searchSubmissions, getMonthlySubmissionCounts, getMonthlyPlatformCounts, getMonthlylevelCounts, getUserStreaks ,todaySubmission} from "../controller/submission.controller.js";
+import { createSubmission, deleteSubmission, editSubmission, filterSubmissions, getAllSubmissions, getTodaySubmissions, getSubmissionById, searchSubmissions, getMonthlySubmissionCounts, getMonthlyPlatformCounts, getMonthlylevelCounts, getUserStreaks ,todaySubmission,getYearlyMonthlySubmissionCounts} from "../controller/submission.controller.js";
 const router = express.Router();
 import { protectRoute } from "../middleware/auth.middleware.js";
 router.post("/create", protectRoute, createSubmission);
@@ -15,7 +15,7 @@ router.patch("/edit/:submissionId", protectRoute, editSubmission);
 router.delete("/delete/:submissionId", protectRoute, deleteSubmission);
 router.get("/streak", protectRoute, getUserStreaks);
 router.get("/todaysubmission", protectRoute, todaySubmission);
-
+router.get("/yearly",protectRoute,getYearlyMonthlySubmissionCounts)
 router.get("/:submissionId", protectRoute, getSubmissionById);
 
 

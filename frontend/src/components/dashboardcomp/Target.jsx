@@ -16,11 +16,15 @@ const Target = () => {
         setIsEditting(true)
     } 
     async function handleUpdateTarget(){
-       await changeTarget(inputValue)
-
+       let num=Number(inputValue)
+       await changeTarget(num)
     }
-    function handleResetToDefault(){
+    async function handleResetToDefault(){
         setInputValue(3)
+        console.log(inputValue)
+        await changeTarget(3)
+        setIsEditting(false)
+
     }
     function cancelEditing(){
         setIsEditting(false)
@@ -31,7 +35,7 @@ const Target = () => {
     {!isEditting?
      (<div className='flex flex-col items-center justify-center bg-card h-full w-full'>
          <p className="text-m font-semibold ">Current Target</p>
-              <p className="text-5xl font-bold text-center text-primary text-red-500 m-1">{currentTarget}</p>
+              <p className="text-5xl font-bold text-center  text-red-500 m-1">{currentTarget}</p>
               <p className="text-sm font-semibold ">submissions/day
         </p>
         <Button onClick={startEditing} className="w-full" disabled={isLoading}>
@@ -84,7 +88,7 @@ const Target = () => {
           className="w-full text-muted-foreground hover:text-foreground"
         >
           <RotateCcw className="mr-2 h-3 w-3" />
-          Reset to Default (5)
+          Reset to Default (3)
         </Button>
       </div>
     )

@@ -34,13 +34,28 @@ const Navbar = ({ logoText, navLinks, onMenuToggle, isMobileMenuOpen }) => {
           </div>
 
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center space-x-4">
-          
-            <Button variant="ghost" size="sm" className="text-white  hover:text-indigo-600" onClick={logout}>
-              Logout
-            </Button>
-             
-            
+          <div className="hidden md:flex items-center ">
+          <div className="dropdown dropdown-end">
+      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+        <div className="w-10 rounded-full">
+          <img
+            alt="Tailwind CSS Navbar component"
+             src={authUser.profilepic || "/avatar.png"}
+            />
+        </div>
+      </div>
+      <ul
+        tabIndex={0}
+        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+        <li>
+          <Link to='/profile'className="justify-between">
+            Profile
+          </Link>
+        </li>
+        
+        <li><a onClick={logout}>Logout</a></li>
+      </ul>
+    </div> 
           </div>
 
           {/* Mobile Menu Button */}
@@ -67,7 +82,7 @@ const Navbar = ({ logoText, navLinks, onMenuToggle, isMobileMenuOpen }) => {
               ))}
               <div className="pt-4 border-t border-border">
                 <Link to='/signin'>
-                <Button variant="ghost" size="sm" className="w-full justify-start" >Login</Button>
+                <Button variant="ghost" size="sm" className="w-full justify-start" >Logout</Button>
                 </Link>
                 
                  

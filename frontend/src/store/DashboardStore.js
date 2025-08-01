@@ -9,6 +9,7 @@ export const useDashboardStore = create((set) => ({
   currentTarget:0,
   todaySubmission: [],
   isEditting:false,
+  yearlySubmission:[],
 setIsEditting:(some)=>{
   set({isEditting:some})
 },
@@ -67,22 +68,35 @@ setIsEditting:(some)=>{
       set({ isLoading: false });
     }
   },
-  changeTarget:async (change)=>{
-    set({isEditting:true})
+  changeTarget: async (target) => {
+    set({ isEditting: true });
+    console.log("new tar to change",target)
     try {
-      const res=await axiosInstance.patch("/user/updatetarget",change)
-      set({currentTarget:res.data})
-      
+      const res = await axiosInstance.patch("/user/updatetarget",{ target});
+      console.log(res.data)
+      const updatedTarget = res.data;
+      set({ currentTarget: updatedTarget });
+      console.log("Successfully updated target:", updatedTarget);
     } catch (error) {
-      console.error("Error in changing target:", error);
-      toast.error("error in changing target");
+      console.error("Error updating target:", error);
+      toast.error("Error updating target");
+    } finally {
+      set({ isEditting: false });
     }
-    finally{
-      set({isEditting:false})
-    }
+  },
+  getYearly:async ()=>{
+    set({ isLoading: true });
+    try {
+      const response = await axiosInstance.get("/submission/yearly");
+      set({ yearlySubmission: response.data, isLoading: false });
   }
+    catch (error) {
+      console.error("Error getting yearly:", error);
+      toast.error("Error getting yearly");
+    } finally {
+      set({ isEditting: false });
+    }
 
 
-
-
+}
 }));

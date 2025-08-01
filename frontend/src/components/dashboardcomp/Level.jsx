@@ -17,10 +17,10 @@ import {
 } from "../ui/chart"
 import { useDashboardStore } from "../../store/DashboardStore.js" 
 const difficultyColors = {
-  Easy: "var(--chart-5)",
-  Medium: "var(--chart-2)",
-  Hard: "var(--chart-3)",
-  Unknown: "var(--chart-6)" // for _id: ""
+  Easy: "indigo",
+  Medium: "yellow",
+  Hard: "blue",
+  Unknown: "var(--chart-1)" // for _id: ""
 };
 
 const chartConfig = {
@@ -44,7 +44,7 @@ const Level = () => {
     <div className='h-full w-full flex items-center justify-center'>
          <Card className="flex flex-col h-full w-full">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart</CardTitle>
+        <CardTitle>Level wise </CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
@@ -61,7 +61,7 @@ const Level = () => {
                 {levelCounts.map((entry, index) => (
                     <Cell
                     key={`cell-${index}`}
-                    fill={difficultyColors[entry._id] || "gray"}
+                    fill={difficultyColors[entry._id] || "brown"}
                     />
                 ))}
                 </Pie>

@@ -7,8 +7,8 @@ function Layout() {
  const  navLinks = [
     { text: "Dashboard", href: "/dashboard" },
     { text: "Submission", href: "/submission" },
-    { text: "Extension", href: "/extension" },
-    {text: "Settings", href: "/setting"}
+    { text: "Extension", href: "/extension" }
+    
   ]
   return (
     <div className=" min-h-full overflow-auto flex flex-col bg-[#150b2d] text-white ">

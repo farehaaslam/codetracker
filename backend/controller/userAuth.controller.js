@@ -159,6 +159,7 @@ export const updateProfile=async (req,res) => {
 //update target 
 export const updateTarget=async (req,res) => {
     try {
+        
         const {target}=req.body;
         const userId=req.user._id;
         const updatedUser=await User.findByIdAndUpdate(userId,{target},{new:true});

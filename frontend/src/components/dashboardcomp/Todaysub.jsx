@@ -8,7 +8,8 @@ const Todaysub = () => {
     },[getTodaySubmission])
     const todaycount=todaySubmission.length
     const isTargetMet = todaycount >= currentTarget;
-    const progressPercentage = (todaycount / currentTarget) * 100;
+    const per=(todaycount / currentTarget) * 100;
+    const progressPercentage = per>100?100:per
   return (
     <div className='h-full w-full flex flex-col items-center justify-center gap-7'>
         

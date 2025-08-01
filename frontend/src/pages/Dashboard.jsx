@@ -6,10 +6,11 @@ import Level from '@/components/dashboardcomp/Level'
 import Target from '@/components/dashboardcomp/Target'
 import Todaysub from '@/components/dashboardcomp/Todaysub'
 import Steakstatus from '@/components/dashboardcomp/Steakstatus'
+import Yearly from '@/components/dashboardcomp/Yearly'
 const Dashboard = () => {
   return (
-    <div className="min-h-screen  p-6 mt-[25px] ">
-      <div className="grid gap-4 max-w-6xl mx-auto h-[80vh] grid-cols-12 auto-rows-auto">
+    <div className="min-h-screen  p-6 mt-[25px] mb-6 ">
+      <div className="grid gap-4 max-w-6xl mx-auto h-[80vh] grid-cols-12 auto-rows-auto mb-6">
         
         {/* Monthly Analysis spans full row */}
         
@@ -36,13 +37,13 @@ const Dashboard = () => {
         </div>
 
         {/* Streaks */}
-        <div className=" rounded-lg flex items-center justify-center col-span-6 border-2 border-gray-300">
+        <div className=" rounded-lg flex items-center justify-center col-span-6 ">
           <Level />
         </div>
 
         {/* Topic Wise Count */}
-        <div className="bg-indigo-600 rounded-lg p-6 flex items-center justify-center col-span-12">
-          <h2 className="text-white text-xl font-semibold">Topic Wise Count</h2>
+        <div className="rounded-lg flex items-center justify-center col-span-12 ">
+          <Yearly/>
         </div>
       </div>
     </div>

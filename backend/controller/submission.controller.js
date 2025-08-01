@@ -180,98 +180,137 @@ export const searchSubmissions = async (req, res) => {
     }
 };
 export const getMonthlySubmissionCounts = async (req, res) => {
-  const userId = req.user._id;
-
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth(); // 0-indexed
-const daysInMonth = new Date(year, month + 1, 0).getDate();
-const firstDayOfMonth = new Date(year, month, 1);
-const firstDayOfNextMonth = new Date(year, month, daysInMonth, 23, 59, 59, 999);
-
-
-  try {
-    // Aggregate submissions grouped by date
-    const submissions = await Submission.aggregate([
-      {
-        $match: {
-          userId,
-          createdAt: {
-            $gte: firstDayOfMonth,
-            $lt: firstDayOfNextMonth,
+    const userId = req.user._id;
+  
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth(); // 0-indexed
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = new Date(year, month, 1);
+    const firstDayOfNextMonth = new Date(year, month + 1, 1); // exclusive
+  
+    try {
+      const submissions = await Submission.aggregate([
+        {
+          $match: {
+            userId,
+            createdAt: {
+              $gte: firstDayOfMonth,
+              $lt: firstDayOfNextMonth,
+            },
           },
         },
-      },
-      {
-        $group: {
-          _id: {
-            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+        {
+          $group: {
+            _id: {
+              $dateToString: { format: "%Y-%m-%d", date: "$createdAt" ,timezone: "Asia/Kolkata",},
+            },
+            count: { $sum: 1 },
           },
-          count: { $sum: 1 },
         },
-      },
-      {
-        $project: {
-          _id: 0,
-          date: "$_id",
-          count: 1,
+        {
+          $project: {
+            _id: 0,
+            date: "$_id",
+            count: 1,
+          },
         },
-      },
-      { $sort: { date: 1 } },
-    ]);
-
-    // Fill missing dates with count: 0
-    const countMap = new Map(submissions.map(item => [item.date, item.count]));
-
-    const allDates = [];
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = new Date(year, month, day).toISOString().split("T")[0];
-      allDates.push({
-        date,
-        count: countMap.get(date) || 0,
-      });
+        { $sort: { date: 1 } },
+      ]);
+  
+      // Fill missing dates with count = 0
+      const countMap = new Map(submissions.map(item => [item.date, item.count]));
+  
+      const allDates = [];
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateObj = new Date(year, month, day);
+        const isoDate = dateObj.toISOString().split("T")[0]; // 'YYYY-MM-DD'
+        allDates.push({
+          date: isoDate,
+          count: countMap.get(isoDate) || 0,
+        });
+      }
+  
+      return res.status(200).json(allDates);
+    } catch (error) {
+      console.error("Error fetching monthly submission counts:", error.message);
+      return res.status(500).json({ message: "Internal server error" });
     }
-
-    return res.status(200).json(allDates);
-  } catch (error) {
-    console.error("Error fetching monthly submission counts:", error.message);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
+  };
+  
 export const getMonthlyPlatformCounts = async (req, res) => {
     const userId = req.user._id;
-
+  
+    // Get the first and last day of the current month
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+  
     try {
-        const platformCounts = await Submission.aggregate([
-            { $match: { userId } },
-            {
-                $group: {
-                    _id: "$platform",
-                    count: { $sum: 1 }
-                }
-            },
-            { $sort: { count: -1 } }
-        ]);
-
-        return res.status(200).json(platformCounts);
+      const platformCounts = await Submission.aggregate([
+        {
+          $match: {
+            userId,
+            createdAt: {
+              $gte: firstDay,
+              $lte: lastDay,
+            }
+          }
+        },
+        {
+          $group: {
+            _id: "$platform",
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $sort: { count: -1 }
+        }
+      ]);
+  
+      return res.status(200).json(platformCounts);
     } catch (error) {
-        console.error("Error fetching monthly platform counts:", error.message);
-        return res.status(500).json({ message: "Internal server error" });
+      console.error("Error fetching monthly platform counts:", error.message);
+      return res.status(500).json({ message: "Internal server error" });
     }
-};
+  };
+  
 export const getMonthlylevelCounts = async (req, res) => {
     const userId = req.user._id;
 
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
     try {
         const levelCounts = await Submission.aggregate([
-            { $match: { userId } },
+            {
+                $match: {
+                    userId,
+                    createdAt: {
+                        $gte: startOfMonth,
+                        $lte: endOfMonth,
+                    },
+                },
+            },
+            {
+                $addFields: {
+                    normalizedDifficulty: {
+                        $cond: {
+                            if: { $or: [{ $eq: ["$difficulty", null] }, { $eq: ["$difficulty", ""] }] },
+                            then: null,
+                            else: "$difficulty",
+                        },
+                    },
+                },
+            },
             {
                 $group: {
-                    _id: "$difficulty",
-                    count: { $sum: 1 }
-                }
+                    _id: "$normalizedDifficulty",
+                    count: { $sum: 1 },
+                },
             },
-            { $sort: { count: -1 } }
+            { $sort: { count: -1 } },
         ]);
 
         return res.status(200).json(levelCounts);
@@ -279,7 +318,71 @@ export const getMonthlylevelCounts = async (req, res) => {
         console.error("Error fetching monthly level counts:", error.message);
         return res.status(500).json({ message: "Internal server error" });
     }
-}
+};
+export const getYearlyMonthlySubmissionCounts = async (req, res) => {
+  const userId = req.user._id;
+
+  const now = new Date();
+  const currentYear = now.getFullYear();
+
+  const startOfYear = new Date(currentYear, 0, 1); // Jan 1
+  const endOfYear = new Date(currentYear + 1, 0, 1); // Jan 1 of next year
+
+  try {
+    // 1. Get actual submission counts grouped by month
+    const submissions = await Submission.aggregate([
+      {
+        $match: {
+          userId,
+          createdAt: {
+            $gte: startOfYear,
+            $lt: endOfYear,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%m", date: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          month: "$_id",
+          count: 1,
+          _id: 0,
+        },
+      },
+    ]);
+
+    // 2. Create a map from the result
+    const submissionMap = new Map(submissions.map(item => [item.month, item.count]));
+
+    // 3. Build the final array with all months
+    const months = [
+      "01", "02", "03", "04", "05", "06",
+      "07", "08", "09", "10", "11", "12"
+    ];
+
+    const result = months.map((month, index) => ({
+      month: new Date(currentYear, index).toLocaleString('default', { month: 'short' }), // Jan, Feb...
+      count: submissionMap.get(month) || 0,
+    }));
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error fetching monthly submission counts:", error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+
+
+
 export const getUserStreaks = async (req, res) => {
     const userId = req.user._id;
   
