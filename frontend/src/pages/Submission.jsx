@@ -228,7 +228,7 @@ export default function SubmissionsDashboard() {
 
   return (
     <div className="min-h-screen text-white  ">
-      <div className="mx-auto max-w-7xl p-4 md:p-6 mt-[100px] flex gap-[25px] flex-col">
+      <div className="mx-auto max-w-7xl p-4 md:p-6 mt-[25px] flex gap-[25px] flex-col">
         {/* Header */}
         <SubHeader />
 

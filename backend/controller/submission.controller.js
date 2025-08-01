@@ -1,5 +1,7 @@
 import Submission from "../models/submission.model.js";
 import { genratejwt } from "../lib/utils.js";
+import e from "express";
+import  calculateStreaks  from "../lib/streak.js";
 // creating submission
 export const createSubmission = async (req, res) => {
     const { platform, questionName, questionLink, note, topic, difficulty } = req.body;
@@ -183,9 +185,10 @@ export const getMonthlySubmissionCounts = async (req, res) => {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth(); // 0-indexed
-  const firstDayOfMonth = new Date(year, month, 1);
-  const firstDayOfNextMonth = new Date(year, month + 1, 1);
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+const daysInMonth = new Date(year, month + 1, 0).getDate();
+const firstDayOfMonth = new Date(year, month, 1);
+const firstDayOfNextMonth = new Date(year, month, daysInMonth, 23, 59, 59, 999);
+
 
   try {
     // Aggregate submissions grouped by date
@@ -256,3 +259,56 @@ export const getMonthlyPlatformCounts = async (req, res) => {
         return res.status(500).json({ message: "Internal server error" });
     }
 };
+export const getMonthlylevelCounts = async (req, res) => {
+    const userId = req.user._id;
+
+    try {
+        const levelCounts = await Submission.aggregate([
+            { $match: { userId } },
+            {
+                $group: {
+                    _id: "$difficulty",
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { count: -1 } }
+        ]);
+
+        return res.status(200).json(levelCounts);
+    } catch (error) {
+        console.error("Error fetching monthly level counts:", error.message);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+export const getUserStreaks = async (req, res) => {
+    const userId = req.user._id;
+  
+    try {
+      const submissions = await Submission.find({ userId }).sort({ createdAt: 1 });
+  
+      if (!submissions.length) {
+        return res.status(200).json({ currentStreak: 0, longestStreak: 0 });
+      }
+  
+      const streaks = calculateStreaks(submissions);
+      return res.status(200).json(streaks);
+  
+    } catch (error) {
+      console.error("Error fetching streaks:", error.message);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  };
+export const todaySubmission = async (req, res) => {
+    const userId = req.user._id;
+    try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const submissions = await Submission.find({ userId, createdAt: { $gte: today, $lt: tomorrow } }).sort({ createdAt: -1 });
+        return res.status(200).json(submissions);
+    } catch (error) {
+        console.error("Error fetching today's submissions:", error.message);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}

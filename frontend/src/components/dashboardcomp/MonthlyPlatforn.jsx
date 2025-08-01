@@ -36,7 +36,7 @@ const MonthlyPlatform = () => {
   }, [getPlatformCounts]);
 
   return (
-    <div className='h-full w-full rounded-b-lg'>
+    <div className=' w-full rounded-b-lg'>
       <Card>
         <CardHeader>
           <CardTitle>Platform-wise Submissions</CardTitle>
@@ -48,7 +48,7 @@ const MonthlyPlatform = () => {
               data={platformCounts}
               layout="vertical"
               margin={{ left: 40 }}
-              height={40 * platformCounts.length} // auto height
+               height={25} // auto height
             >
               <YAxis
                 dataKey="_id" // platform name
@@ -67,7 +67,7 @@ const MonthlyPlatform = () => {
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
               />
-              <Bar dataKey="count" radius={5}>
+              <Bar dataKey="count" radius={3} barSize={18}>
                 {platformCounts.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}

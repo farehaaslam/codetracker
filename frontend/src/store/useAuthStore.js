@@ -10,6 +10,8 @@ export const useAuthStore = create((set) => ({
     isLoggingIn:false,
     isUpdatingProfile:false,
     isCheckingAuth:true,
+    
+
 
     checkAuth: async () => {
         set({ isCheckingAuth: true });
@@ -51,6 +53,32 @@ export const useAuthStore = create((set) => ({
         } finally {
             set({ isLoggingIn: false });
         }
+    },
+    logout: async () => {
+        try {
+            console.log("Logging out");
+            await axiosInstance.post("/user/logout");
+            set({ authUser: null });
+            toast.success("Logout successful!");
+        } catch (error) {
+            console.error("Error during logout:", error);
+            toast.error("Logout failed. Please try again.");
+        }
+    },
+    updateProfile:async(data)=>{
+         set({isUpdatingProfile:true})
+         try {
+            const res=await axiosInstance.patch('/user/updateprofile',data)
+            set({authUser:res.data})
+            toast.success("update profile photo succesfully")
+         } catch (error) {
+            console.error("error while updating profile",error);
+            toast.error("unable to upload progile picture")
+            
+         }
+         finally{
+        set({isUpdatingProfile:false})
+         }
     },
 
 

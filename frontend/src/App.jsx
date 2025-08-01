@@ -11,6 +11,8 @@ import Layout from './Layout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import Profile from './pages/Profile.jsx'
 import SubmissionsDashboard from './pages/Submission.jsx'
+import Extension from './pages/Extension.jsx'
+import Setting from './pages/Setting.jsx'
 function App() {
 const {checkAuth,authUser,isCheckingAuth}= useAuthStore()
 
@@ -26,6 +28,10 @@ console.log("Auth User:", authUser);
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<Profile />} />
         <Route path="submission" element={<SubmissionsDashboard />} />
+        <Route path='extension' element={<Extension/>}/>
+        <Route path='setting' element={<Setting/>}/>
+
+
         </Route>
         <Route path='/signin' element={!authUser ?<Signin/>:<Navigate to="/"/>}/>
         <Route path='/signup' element={!authUser?<Signup/>:<Navigate to="/"/>}/>

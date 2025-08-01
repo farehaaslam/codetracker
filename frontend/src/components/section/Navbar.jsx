@@ -1,86 +1,82 @@
 
-import React, { useEffect, useState } from "react"
-import { motion } from "framer-motion"
-import {Link} from "react-router-dom"
-import { cn } from "@/lib/utils"
-import { Home, User, Briefcase, FileText } from 'lucide-react'
-
-
-function Nav({ items, className }) {
-  const [activeTab, setActiveTab] = useState(items[0].name)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '../ui/button';
+import { BarChart3 } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
+const Navbar = ({ logoText, navLinks, onMenuToggle, isMobileMenuOpen }) => {
+    const{authUser,logout}=useAuthStore()
+  
   return (
-    <div
-      className={cn(
-        "fixed bottom-0 sm:top-0 left-1/2 -translate-x-1/2 z-50 mb-6 sm:pt-6",
-        className,
-      )}
-    >
-      <div className="flex items-center gap-3 bg-background/5 border border-border backdrop-blur-lg py-1 px-1 rounded-full shadow-lg">
-        {items.map((item) => {
-          const Icon = item.icon
-          const isActive = activeTab === item.name
+    <nav className="relative z-50 w-full">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-lg flex items-center justify-center">
+              <BarChart3 className="w-5 h-5 text-white" />
+            </div>
+            <span className="text-xl font-bold text-foreground">{logoText}</span>
+          </div>
 
-          return (
-            <Link
-              key={item.name}
-              to={item.url}
-              onClick={() => setActiveTab(item.name)}
-              className={cn(
-                "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
-                "text-foreground/80 hover:text-primary",
-                isActive && "bg-muted text-primary",
-              )}
-            >
-              <span className="hidden md:inline">{item.name}</span>
-              <span className="md:hidden">
-                <Icon size={18} strokeWidth={2.5} />
-              </span>
-              {isActive && (
-                <motion.div
-                  layoutId="lamp"
-                  className="absolute inset-0 w-full bg-primary/5 rounded-full -z-10"
-                  initial={false}
-                  transition={{
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
-                  }}
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link, index) => (
+              <Link
+                key={index}
+                to={link.href}
+                className="text-muted-foreground hover:text-foreground transition-colors font-medium"
+              >
+                {link.text}
+              </Link>
+            ))}
+          </div>
+
+          {/* Desktop Auth */}
+          <div className="hidden md:flex items-center space-x-4">
+          
+            <Button variant="ghost" size="sm" className="text-white  hover:text-indigo-600" onClick={logout}>
+              Logout
+            </Button>
+             
+            
+          </div>
+
+          {/* Mobile Menu Button */}
+          {/* <button
+            onClick={onMenuToggle}
+            className="md:hidden p-2 text-muted-foreground hover:text-foreground"
+          >
+            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button> */}
+        </div>
+
+        {/* Mobile Menu */}
+        
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-background border-b border-border shadow-lg">
+            <div className="px-6 py-4 space-y-4">
+              {navLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="block text-muted-foreground hover:text-foreground transition-colors font-medium"
                 >
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-primary rounded-t-full">
-                    <div className="absolute w-12 h-6 bg-primary/20 rounded-full blur-md -top-2 -left-2" />
-                    <div className="absolute w-8 h-6 bg-primary/20 rounded-full blur-md -top-1" />
-                    <div className="absolute w-4 h-4 bg-primary/20 rounded-full blur-sm top-0 left-2" />
-                  </div>
-                </motion.div>
-              )}
-            </Link>
-          )
-        })}
+                  {link.text}
+                </a>
+              ))}
+              <div className="pt-4 border-t border-border">
+                <Link to='/signin'>
+                <Button variant="ghost" size="sm" className="w-full justify-start" >Login</Button>
+                </Link>
+                
+                 
+              </div>
+            </div>
+          </div>
+        
       </div>
-    </div>
-  )
-}
-
-const NavBar =( ) => {
-  const navItems = [
-    { name: 'Dashboard', url: '/dashboard', icon: Home },
-    { name: 'Setting', url: '/profile', icon: User },
-    { name: 'Submission', url: '/submission', icon: Briefcase },
-    { name: 'Logout', url: '#', icon: FileText }
-  ]
-
-  return <Nav items={navItems} />
-}
-export default NavBar;
+    </nav>
+  );
+};
+export default Navbar;

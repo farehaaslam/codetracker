@@ -12,7 +12,7 @@ app.use(cors({
   origin: 'http://localhost:5173', // Your frontend URL
   credentials: true,              // Allow cookies (needed if using withCredentials in axios)
 }));
-app.use(express.json());
+app.use(express.json({  limit: '10mb' }));
 app.use(express.urlencoded({ extended: true , limit: '10mb' }));
 
 app.use(cookieParser());

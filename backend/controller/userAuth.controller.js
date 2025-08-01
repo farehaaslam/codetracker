@@ -1,8 +1,7 @@
 import {genratejwt} from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt"
-
-
+import cloudinary from "../lib/cloudinary.js";
 export const userSignup = async (req, res) => {
     const { username, email, password } = req.body;
     if(!email || !username || !password){
@@ -128,4 +127,58 @@ export const check=(req,res)=>{
         
     }
 }
+export const updateProfile=async (req,res) => {
+    try {
+        const {profilepic}=req.body;
+        const userId=req.user._id;
+        if(!profilepic){
+            return res.status(400).json({
+                message:"profile pic is required"
+            });
+        }
+        const uploadResponse=await cloudinary.uploader.upload(profilepic);
+        const updatedUser=await User.findByIdAndUpdate(
+            userId,
+            {profilepic:uploadResponse.secure_url},
+            {new:true} 
+        )
+        console.log("Cloudinary upload response:", uploadResponse);
+        console.log("updated uuser response :", updatedUser);
+
+
+        res.status(200).json(updatedUser)
+    } catch (error) {
+        console.log("error in updating profile pic :",error.message);
+        res.status(500).json({
+            message:"internal sever error"
+        })
+    }
+    
+}
+
 //update target 
+export const updateTarget=async (req,res) => {
+    try {
+        const {target}=req.body;
+        const userId=req.user._id;
+        const updatedUser=await User.findByIdAndUpdate(userId,{target},{new:true});
+        res.status(200).json(updatedUser.target);
+    } catch (error) {
+        console.log("error in updating target :",error.message);
+        res.status(500).json({
+            message:"internal sever error"
+        })
+    }
+}
+export const getTarget=async (req,res) => {
+    try {
+        const userId=req.user._id;
+        const user=await User.findById(userId);
+        res.status(200).json(user.target);
+    } catch (error) {
+        console.log("error in getting target :",error.message);
+        res.status(500).json({
+            message:"internal sever error"
+        })
+    }
+}
