@@ -5,6 +5,7 @@ export const genratejwt= (userid) => {
         const token =  jwt.sign({userid},process.env.JWT_SECRET,{
             expiresIn:"2d"
         })
+        console.log(token)
        
         return token;
     } catch (error) {

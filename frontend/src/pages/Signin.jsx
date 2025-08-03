@@ -20,13 +20,32 @@ const SignIn = () => {
     return true;
   };
   const { signin } = useAuthStore();
-    const handleSignIn = (e) => {
+    const handleSignIn = async(e) => {
         e.preventDefault();
     
         const success = validateForm();
         console.log("Form Data:", formData);
         console.log("Validation Success:", success);
-        if (success === true) signin(formData);
+        if (success === true) {
+         const data=await signin(formData)
+            if (data?.token) {
+      // ✅ Send token to Chrome Extension
+      console.log("Sending token to extension:", data.token)
+      window.postMessage(
+        {
+          type: "AUTH_TOKEN",
+          token: data.token,
+        },
+        "*"
+      );
+
+      console.log("✅ Token sent to extension:", data.token);
+    } else {
+      console.error("❌ No token received. Cannot send to extension.");
+    }
+     
+
+        }
     };
 
   return (
