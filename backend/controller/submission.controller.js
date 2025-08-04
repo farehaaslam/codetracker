@@ -377,12 +377,6 @@ export const getYearlyMonthlySubmissionCounts = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
-
-
-
 export const getUserStreaks = async (req, res) => {
     const userId = req.user._id;
   

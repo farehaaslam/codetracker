@@ -71,7 +71,7 @@ export default function SubmissionsDashboard() {
   const [formData, setFormData] = useState({
     questionName: "",
     platform: "",
-    link: "",
+    questionLink: "",
     topic: [],
     difficulty: "",
     note: "",
@@ -144,7 +144,7 @@ export default function SubmissionsDashboard() {
     setFormData({
       questionName: submission.questionName,
       platform: submission.platform,
-      link: submission.link,
+      questionLink: submission.questionLink,
       topic: normalizedTopic,
       difficulty: submission.difficulty,
       note: submission.note,
@@ -185,7 +185,7 @@ export default function SubmissionsDashboard() {
     setFormData({
       questionName: "",
       platform: "",
-      link: "",
+      questionLink: "",
       topic: [],
       difficulty: "",
       note: "",
@@ -450,7 +450,7 @@ export default function SubmissionsDashboard() {
                 <div className="flex items-start justify-between">
                   <div className="space-y-2 flex-1">
                     <a
-                      href={submission.link}
+                      href={submission.questionLink}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="font-semibold text-white hover:text-purple-400 transition-colors flex items-center gap-2 group"

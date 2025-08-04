@@ -81,11 +81,9 @@ const Navbar = ({ logoText, navLinks, onMenuToggle, isMobileMenuOpen }) => {
                 </a>
               ))}
               <div className="pt-4 border-t border-border">
-                <Link to='/signin'>
-                <Button variant="ghost" size="sm" className="w-full justify-start" >Logout</Button>
-                </Link>
                 
-                 
+                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={logout} >Logout</Button>
+
               </div>
             </div>
           </div>

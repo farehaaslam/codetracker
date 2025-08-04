@@ -37,6 +37,7 @@ console.log("Auth User:", authUser);
         </Route>
         <Route path='/signin' element={!authUser ?<Signin/>:<Navigate to="/"/>}/>
         <Route path='/signup' element={!authUser?<Signup/>:<Navigate to="/"/>}/>
+        
         </Routes>
    <Toaster />
     </div>
