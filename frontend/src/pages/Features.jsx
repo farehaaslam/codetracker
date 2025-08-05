@@ -56,7 +56,7 @@ const Features = () => {
 
   return (
     <div>
-        <div className="min-h-screen  dark:from-indigo-950/20 dark:via-background dark:to-violet-950/20 text-white">
+        <div className="min-h-screen  text-white">
       
       <section className="px-6 py-10 max-w-6xl mx-auto text-center">
         {/* Badge */}

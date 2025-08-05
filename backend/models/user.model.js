@@ -23,6 +23,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "3",
   },
+  streak:{
+    type: Number,
+  }
 },{
     timestamps:true,
 });

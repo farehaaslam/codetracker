@@ -1,7 +1,7 @@
 import Submission from "../models/submission.model.js";
 import { genratejwt } from "../lib/utils.js";
 import e from "express";
-import  calculateStreaks  from "../lib/streak.js";
+import  {calculateStreaks} from "../lib/streak.js";
 // creating submission
 export const createSubmission = async (req, res) => {
     const { platform, questionName, questionLink, note, topic, difficulty } = req.body;
@@ -381,31 +381,40 @@ export const getUserStreaks = async (req, res) => {
     const userId = req.user._id;
   
     try {
-      const submissions = await Submission.find({ userId }).sort({ createdAt: 1 });
-  
-      if (!submissions.length) {
-        return res.status(200).json({ currentStreak: 0, longestStreak: 0 });
-      }
-  
-      const streaks = calculateStreaks(submissions);
-      return res.status(200).json(streaks);
+       const submissions = await Submission.find({ userId }).sort({ createdAt: 1 });
+
+    if (!submissions.length) {
+      return res.status(200).json({ currentStreak: 0, longestStreak: 0 });
+    }
+
+    const {currentStreak,longestStreak} = calculateStreaks(submissions);
+    console.log(currentStreak)
+    console.log(longestStreak)
+    return res.status(200).json({ currentStreak, longestStreak });
   
     } catch (error) {
       console.error("Error fetching streaks:", error.message);
       return res.status(500).json({ message: "Internal server error" });
     }
   };
+
+
 export const todaySubmission = async (req, res) => {
-    const userId = req.user._id;
-    try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const submissions = await Submission.find({ userId, createdAt: { $gte: today, $lt: tomorrow } }).sort({ createdAt: -1 });
-        return res.status(200).json(submissions);
-    } catch (error) {
-        console.error("Error fetching today's submissions:", error.message);
-        return res.status(500).json({ message: "Internal server error" });
-    }
-}
+  const userId = req.user._id; // From protectRoute middleware
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const count = await Submission.countDocuments({
+      userId,
+      createdAt: { $gte: today, $lt: tomorrow }
+    });
+
+    return res.status(200).json({ count });
+  } catch (error) {
+    console.error("Error fetching today's submission count:", error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

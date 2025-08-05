@@ -7,9 +7,11 @@ export const useDashboardStore = create((set) => ({
   platformCounts: [],
   levelCounts: [],
   currentTarget:0,
-  todaySubmission: [],
+  todaySubmission: 0,
   isEditting:false,
   yearlySubmission:[],
+  currStreak: null,
+    longestStreak: null,
 setIsEditting:(some)=>{
   set({isEditting:some})
 },
@@ -61,7 +63,9 @@ setIsEditting:(some)=>{
     set({ isLoading: true });
     try {
       const response = await axiosInstance.get("/submission/todaysubmission");
-      set({ todaySubmission: response.data, isLoading: false });
+            
+
+      set({ todaySubmission: response.data.count, isLoading: false });
     } catch (error) {
       console.error("Error fetching today's submission:", error);
       toast.error("Failed to fetch today's submission");
@@ -98,5 +102,26 @@ setIsEditting:(some)=>{
     }
 
 
-}
+},
+ fetchStreak: async () => {
+   
+
+    try {
+      const res = await axiosInstance.get("/submission/streak"); // Your backend route
+      const { currentStreak, longestStreak } = res.data;
+
+      set({
+        currStreak: currentStreak,
+        longestStreak: longestStreak,
+        
+      });
+    } catch (error) {
+      console.error("Error fetching streak:", error);
+      set({
+        streakError: error.response?.data?.message || "Failed to fetch streak",
+    
+      });
+    }
+  },
+   
 }));

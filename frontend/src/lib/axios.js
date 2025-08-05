@@ -25,7 +25,7 @@ axiosInstance.interceptors.response.use(
       const refreshToken = localStorage.getItem("refreshToken");
 console.log("genrating new access")
       try {
-        const res = await axios.post("http://localhost:5000/api/auth/refresh", {
+        const res = await axios.post("http://localhost:5000/api/user/refresh", {
           refreshToken,
         });
 

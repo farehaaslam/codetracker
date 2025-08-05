@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import { Flame } from 'lucide-react'
 import { useDashboardStore } from '../../store/DashboardStore'
 const Steakstatus = () => {
-    const {todaySubmission,getTodaySubmission}=useDashboardStore();
+    const {todaySubmission,getTodaySubmission,currStreak,fetchStreak,longestStreak}=useDashboardStore();
     useEffect(()=>{
         getTodaySubmission();
-    },[getTodaySubmission])
-    const streak=todaySubmission.length
+        fetchStreak()
+    },[getTodaySubmission,fetchStreak])
+    const streak=currStreak||0
      function getStreakMessage(streak) {
         if (streak === 0) return "Start your streak today!"
         if (streak === 1) return "Great start! Keep it going!"
@@ -33,6 +34,8 @@ const Steakstatus = () => {
 
   {/* Streak Message */}
   <p className="text-xs text-center">{getStreakMessage(streak)}</p>
+  <p>longest streak : <span className='text-red-500'>{longestStreak}
+    </span></p>
   </div>
   )
 }

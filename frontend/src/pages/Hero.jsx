@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import { Link, Navigate } from 'react-router-dom';
 import Navbar from '@/components/section/Navbar';
+import Features from './Features';
 // Utility function
 const utils = {
   cn: (...classes) => {
@@ -106,7 +107,6 @@ const MockupFrame = React.forwardRef(
 );
 MockupFrame.displayName = "MockupFrame";
 
-// const Navbar = ({ logoText, navLinks, onMenuToggle, isMobileMenuOpen }) => {
 //   return (
 //     <nav className="relative z-50 w-full">
 //       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -310,10 +310,8 @@ const CodeTrackerHero = ({
   return (
     <div className="relative min-h-screen  overflow-hidden ">
       {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-background to-violet-50 dark:from-indigo-950/20 dark:via-background dark:to-violet-950/20" />
-      {/* <Navbar/> */}
-
-      {/* Hero Content */}
+      <div className="absolute inset-0 bg-gradient-to-br  z-0" />
+      
       <div className="relative z-10 pt-16 pb-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
@@ -400,11 +398,12 @@ const CodeTrackerHero = ({
               </MockupFrame>
 
               {/* Background Glow */}
-              <Glow variant="center" className="opacity-60" />
+              {/* <Glow variant="center" className="opacity-60" /> */}
             </div>
           </div>
         </div>
       </div>
+      <Features className=" relative z-10"/>
     </div>
   );
 };

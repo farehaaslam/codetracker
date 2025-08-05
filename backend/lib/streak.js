@@ -1,50 +1,60 @@
-function calculateStreaks(submissions) {
-    let currentStreak = 0;
-    let longestStreak = 0;
-    let streak = 0;
-  
-    const datesSet = new Set(
-      submissions.map((s) => new Date(s.createdAt).toDateString())
-    );
-  
-    const sortedDates = Array.from(datesSet).sort(
-      (a, b) => new Date(a) - new Date(b)
-    );
-  
-    let prevDate = null;
-  
-    for (let dateStr of sortedDates) {
-      const currDate = new Date(dateStr);
-  
-      if (!prevDate) {
-        streak = 1;
-      } else {
-        const diff = (currDate - prevDate) / (1000 * 60 * 60 * 24);
-        if (diff === 1) {
-          streak++;
-        } else if (diff > 1) {
-          streak = 1;
-        }
-      }
-  
-      if (streak > longestStreak) longestStreak = streak;
-      prevDate = new Date(dateStr);
+export function calculateStreaks(submissions) {
+  let currentStreak = 0;
+  let longestStreak = 0;
+
+  // ✅ Step 1: Collect all unique submission dates
+  const dateStrings = new Set(
+    submissions.map((s) => new Date(s.createdAt).toDateString())
+  );
+
+  // ✅ Step 2: Convert to sorted list of Date objects
+  const sortedDates = Array.from(dateStrings)
+    .map((d) => new Date(d))
+    .sort((a, b) => a - b);
+
+  // ✅ Step 3: Calculate longest streak
+  let streak = 1;
+  for (let i = 1; i < sortedDates.length; i++) {
+    const prev = sortedDates[i - 1];
+    const curr = sortedDates[i];
+    const diff = (curr - prev) / (1000 * 60 * 60 * 24); // in days
+
+    if (diff === 1) {
+      streak++;
+    } else {
+      streak = 1;
     }
-  
-    // Calculate current streak ending today
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-  
-    let tempStreak = 0;
-    let pointer = new Date(today);
-  
-    while (datesSet.has(pointer.toDateString())) {
-      tempStreak++;
-      pointer.setDate(pointer.getDate() - 1);
+
+    if (streak > longestStreak) {
+      longestStreak = streak;
     }
-  
-    currentStreak = tempStreak;
-  
-    return { currentStreak, longestStreak };
   }
-  export default calculateStreaks;
+
+  // ✅ Step 4: Calculate current streak ending at the last submission
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const lastSubmission = sortedDates[sortedDates.length - 1];
+  const gap = (today - lastSubmission) / (1000 * 60 * 60 * 24);
+
+  // If user submitted today or yesterday, count back streak
+  if (gap <= 1) {
+    let tempStreak = 1;
+    let ptr = new Date(lastSubmission);
+
+    while (dateStrings.has(ptr.toDateString())) {
+      ptr.setDate(ptr.getDate() - 1);
+      if (dateStrings.has(ptr.toDateString())) {
+        tempStreak++;
+      } else {
+        break;
+      }
+    }
+
+    currentStreak = tempStreak;
+  } else {
+    currentStreak = 0;
+  }
+
+  return { currentStreak, longestStreak };
+}
