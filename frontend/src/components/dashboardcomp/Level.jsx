@@ -39,7 +39,7 @@ const Level = () => {
     
         fetchData();
     }, [getlevelCounts]);
-    console.log(levelCounts)
+    // console.log(levelCounts)
   return (
     <div className='h-full w-full flex items-center justify-center'>
          <Card className="flex flex-col h-full w-full">

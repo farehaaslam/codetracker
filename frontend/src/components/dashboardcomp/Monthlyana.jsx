@@ -27,7 +27,6 @@ const Monthlyana = () => {
     fetchData();
 }, [getMonthlyCounts]);
 
-        console.log(monthlycounts); // Note: this might still be stale
 const chartConfig = {
   count: {
     label: "Submissions",

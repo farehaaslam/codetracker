@@ -76,7 +76,7 @@ console.log("Validation Success:", success);
             Sign Up
           </button>
           {/* Google Sign In */}
-          <button
+          {/* <button
             className="w-full flex items-center justify-center gap-2 bg-[#232136] border border-[#805ad5]/20 rounded-full px-5 py-3 font-medium text-white shadow-lg hover:brightness-110 transition text-base"
           >
             <img
@@ -85,12 +85,12 @@ console.log("Validation Success:", success);
               className="w-5 h-5"
             />
             Continue with Google
-          </button>
+          </button> */}
           <div className="w-full text-center mt-3">
             <span className="text-xs text-[#c3b8eb]/80">
               have an account?{" "}
               <a
-                href="#"
+                href="/signin"
                 className="underline text-[#a991ff] hover:text-[#f5e7ff]"
               >
                 Sign in instead

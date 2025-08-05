@@ -12,6 +12,5 @@ export const genratejwt= (userid) => {
         console.log("error in genrate jwt function",error.message);
         console.log("unable to genrate jwttoken ");
         
-    }
-    
+    }   
 }

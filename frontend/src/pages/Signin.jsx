@@ -86,7 +86,7 @@ const SignIn = () => {
             Sign In
           </button>
           {/* Google Sign In */}
-          <button
+          {/* <button
             className="w-full flex items-center justify-center gap-2 bg-[#232136] border border-[#805ad5]/20 rounded-full px-5 py-3 font-medium text-white shadow-lg hover:brightness-110 transition text-base"
           >
             <img
@@ -95,12 +95,12 @@ const SignIn = () => {
               className="w-5 h-5"
             />
             Continue with Google
-          </button>
+          </button> */}
           <div className="w-full text-center mt-3">
             <span className="text-xs text-[#c3b8eb]/80">
               Don&apos;t have an account?{" "}
               <a
-                href="#"
+                href="/signup"
                 className="underline text-[#a991ff] hover:text-[#f5e7ff]"
               >
                 Sign up, it&apos;s free!

@@ -4,7 +4,7 @@ import {  Card} from "../ui/card"
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { RotateCcw } from 'lucide-react'
-
+import { Loader2 } from 'lucide-react'
 
 const Target = () => {
     const {currentTarget,getTarget,isEditting,changeTarget,isLoading,setIsEditting}=useDashboardStore();
@@ -33,12 +33,12 @@ const Target = () => {
   return (
    <div>
     {!isEditting?
-     (<div className='flex flex-col items-center justify-center bg-card h-full w-full'>
+     (<div className='flex flex-col items-center justify-center bg-card h-full w-full gap-2'>
          <p className="text-m font-semibold ">Current Target</p>
               <p className="text-5xl font-bold text-center  text-red-500 m-1">{currentTarget}</p>
               <p className="text-sm font-semibold ">submissions/day
         </p>
-        <Button onClick={startEditing} className="w-full" disabled={isLoading}>
+        <Button onClick={startEditing} className="w-full h-5 p-3" disabled={isLoading} >
               Update Target
             </Button>
 
