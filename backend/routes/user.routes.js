@@ -1,4 +1,4 @@
-import { userSignup ,userSignin,userlogout,check,updateProfile,updateTarget,getTarget} from "../controller/userAuth.controller.js";
+import { userSignup ,userSignin,userlogout,check,updateProfile,updateTarget,getTarget,refreshAccessToken} from "../controller/userAuth.controller.js";
 import express from "express";
 import { protectRoute } from "../middleware/auth.middleware.js";
 const router = express.Router();
@@ -9,4 +9,5 @@ router.get("/check",protectRoute, check);
 router.patch("/updateprofile",protectRoute, updateProfile); // Endpoint to check if user is authenticated
 router.patch("/updatetarget",protectRoute, updateTarget);
 router.get("/gettarget",protectRoute, getTarget);
+router.post('/refresh', refreshAccessToken);
 export default router;

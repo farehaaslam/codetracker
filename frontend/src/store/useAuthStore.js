@@ -14,16 +14,20 @@ export const useAuthStore = create((set) => ({
 
 
     checkAuth: async () => {
+        // Prevent multiple simultaneous auth checks
+     
+        
         set({ isCheckingAuth: true });
         try {
-            const res= await axiosInstance.get("/user/check");
-            set({ authUser: res.data});
-           
+            const res = await axiosInstance.get("/user/check");
+            set({ authUser: res.data });
         } catch (error) {
-            set({ authUser: null });
+            // Only set authUser to null if it's a 401 (unauthorized)
+            if (error.response?.status === 401) {
+                set({ authUser: null });
+            }
             console.error("Error checking authentication:", error);
-        }
-        finally{
+        } finally {
             set({ isCheckingAuth: false });
         }
     },
@@ -47,6 +51,8 @@ export const useAuthStore = create((set) => ({
             console.log("Signing in with data:", formData);
             const res = await axiosInstance.post("/user/signin", formData);
             set({ authUser: res.data });
+             localStorage.setItem("accessToken", res.data.accessToken); // Store tokens for later use
+      localStorage.setItem("refreshToken", res.data.refreshToken);
             toast.success("Login successful!");
             return res.data
         } catch (error) {
@@ -60,7 +66,11 @@ export const useAuthStore = create((set) => ({
     logout: async () => {
         try {
             console.log("Logging out");
-            await axiosInstance.post("/user/logout");
+            const refreshToken = localStorage.getItem("refreshToken");
+            console.log(refreshToken)
+            await axiosInstance.post("/user/logout",{ refreshToken });
+             localStorage.removeItem("accessToken"); // Clean up stored tokens
+      localStorage.removeItem("refreshToken");
             set({ authUser: null });
             toast.success("Logout successful!");
         } catch (error) {

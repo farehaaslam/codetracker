@@ -1,8 +1,8 @@
-"use client";
 
 import * as React from "react";
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore.js";
+import toast from "react-hot-toast"; 
 const SignIn = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -15,8 +15,8 @@ const SignIn = () => {
     // if(!formData.displayName.trim()) toast.error("display name ");
     
     if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
-    if (!formData.password) return toast.error("Password is required");
-    if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
+// at the top of webapp/frontend/src/pages/Signin.jsx, alongside your other imports
+   if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
     return true;
   };
   const { signin } = useAuthStore();
@@ -28,20 +28,36 @@ const SignIn = () => {
         console.log("Validation Success:", success);
         if (success === true) {
          const data=await signin(formData)
-            if (data?.token) {
-      // ✅ Send token to Chrome Extension
-      console.log("Sending token to extension:", data.token)
-      window.postMessage(
-        {
+         console.log(data.accessToken)
+         console.log(data.refreshToken)
+    //         if (data?.token) {
+    //   // ✅ Send token to Chrome Extension
+    //   // console.log("Sending token to extension:", data.token)
+    //   window.postMessage(
+    //     {
+    //       type: "AUTH_TOKEN",
+    //       token: data.accessToken,
+    //       refreshToken: data.refreshToken
+    //     },
+    //     "*"
+    //   );
+    //   console.log("✅ Token sent to extension:", data.token);
+    // } else {
+    //   console.error("❌ No token received. Cannot send to extension.");
+    // }
+    try {
+        window.postMessage({
           type: "AUTH_TOKEN",
-          token: data.token,
-        },
+           token: data.accessToken,
+          refreshToken: data.refreshToken
+         },
         "*"
       );
 
-      console.log("✅ Token sent to extension:", data.token);
-    } else {
-      console.error("❌ No token received. Cannot send to extension.");
+      
+    } catch (error) {
+      console.log("error in signin jsx token sednding",error)
+      
     }
      
 
