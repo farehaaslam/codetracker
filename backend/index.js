@@ -11,7 +11,7 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:5173', // Local Vite dev server
   'https://codetracker-khaki.vercel.app',
- "chrome-extension://incmgcghbgeeinpadijflmfbnjmggpok" 
+ 'chrome-extension://incmgcghbgeeinpadijflmfbnjmggpok'
 ];
 app.use(cors({
   origin: function (origin, callback) {
