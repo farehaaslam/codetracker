@@ -8,9 +8,20 @@ import userRouter from "./routes/user.routes.js";
 import submissionRouter from "./routes/submission.routes.js";
 const PORT = process.env.PORT || 5000;  
 const app = express();
+const allowedOrigins = [
+  'http://localhost:5173', // Local Vite dev server
+  'https://codetracker-khaki.vercel.app', // Replace with your actual deployed frontend URL
+];
 app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
-  credentials: true,              // Allow cookies (needed if using withCredentials in axios)
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,            
 }));
 app.use(express.json({  limit: '10mb' }));
 app.use(express.urlencoded({ extended: true , limit: '10mb' }));
