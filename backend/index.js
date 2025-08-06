@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 const allowedOrigins = [
   'http://localhost:5173', // Local Vite dev server
-  'https://codetracker-khaki.vercel.app', // Replace with your actual deployed frontend URL
+  'https://codetracker-khaki.vercel.app',
+ " chrome-extension://incmgcghbgeeinpadijflmfbnjmggpok" 
 ];
 app.use(cors({
   origin: function (origin, callback) {
@@ -28,5 +29,5 @@ app.use(express.urlencoded({ extended: true , limit: '10mb' }));
 
 app.use(cookieParser());
 app.use("/api/user", userRouter);
-app.use("/api/submission", submissionRouter); // Assuming you have a submission router
+app.use("/api/submission", submissionRouter); 
 startserver(app, PORT);
