@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
       originalRequest._retry = true;
 
       const refreshToken = localStorage.getItem("refreshToken");
-console.log("genrating new access")
+   //console.log("genrating new access")
       try {
         const res = await axios.post("http://localhost:5000/api/user/refresh", {
           refreshToken,
@@ -36,7 +36,7 @@ console.log("genrating new access")
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshErr) {
-        console.log("Refresh token invalid or expired:", refreshErr);
+       // console.log("Refresh token invalid or expired:", refreshErr);
         // optionally logout user here
        
       }

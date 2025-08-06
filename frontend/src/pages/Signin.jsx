@@ -24,12 +24,12 @@ const SignIn = () => {
         e.preventDefault();
     
         const success = validateForm();
-        console.log("Form Data:", formData);
-        console.log("Validation Success:", success);
+       // console.log("Form Data:", formData);
+        //console.log("Validation Success:", success);
         if (success === true) {
          const data=await signin(formData)
-         console.log(data.accessToken)
-         console.log(data.refreshToken)
+       //  console.log(data.accessToken)
+        // console.log(data.refreshToken)
     //         if (data?.token) {
     //   // ✅ Send token to Chrome Extension
     //   // console.log("Sending token to extension:", data.token)
@@ -41,9 +41,9 @@ const SignIn = () => {
     //     },
     //     "*"
     //   );
-    //   console.log("✅ Token sent to extension:", data.token);
+    //   console.log("Token sent to extension:", data.token);
     // } else {
-    //   console.error("❌ No token received. Cannot send to extension.");
+    //   console.error("No token received. Cannot send to extension.");
     // }
     try {
         window.postMessage({

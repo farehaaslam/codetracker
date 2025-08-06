@@ -36,7 +36,7 @@ export const useAuthStore = create((set) => ({
   signup: async (formData) => {
     set({ isSigningup: true });
     try {
-      console.log("Signing up with data:", formData);
+     // console.log("Signing up with data:", formData);
       const res = await axiosInstance.post("/user/signup", formData);
       set({ authUser: res.data });
       toast.success("Signup successful!");
@@ -50,7 +50,7 @@ export const useAuthStore = create((set) => ({
   signin: async (formData) => {
     set({ isLoggingIn: true });
     try {
-      console.log("Signing in with data:", formData);
+      //console.log("Signing in with data:", formData);
       const res = await axiosInstance.post("/user/signin", formData);
       set({ authUser: res.data });
       localStorage.setItem("accessToken", res.data.accessToken); // Store tokens for later use
@@ -67,9 +67,9 @@ export const useAuthStore = create((set) => ({
   },
   logout: async () => {
     try {
-      console.log("Logging out");
+     // console.log("Logging out");
       const refreshToken = localStorage.getItem("refreshToken");
-      console.log(refreshToken);
+     // console.log(refreshToken);
       await axiosInstance.post("/user/logout", { refreshToken });
       localStorage.removeItem("accessToken"); // Clean up stored tokens
       localStorage.removeItem("refreshToken");

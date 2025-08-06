@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Download, Play, Chrome, Target, BarChart3, Menu, X } from "lucide-react";
+import {
+  Download,
+  Play,
+  Chrome,
+  Target,
+  BarChart3,
+  Menu,
+  X,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
-import { Link, Navigate } from 'react-router-dom';
-import Navbar from '@/components/section/Navbar';
-import Features from './Features';
+import { Link, Navigate } from "react-router-dom";
+import Navbar from "@/components/section/Navbar";
+import Features from "./Features";
+import Extension from "./Extension";
 // Utility function
 const utils = {
   cn: (...classes) => {
-    return classes.filter(Boolean).join(' ');
-  }
+    return classes.filter(Boolean).join(" ");
+  },
 };
 
 // Glow Component
@@ -30,28 +39,26 @@ const glowVariants = cva("absolute w-full", {
   },
 });
 
-const Glow = React.forwardRef(
-  ({ className, variant, ...props }, ref) => (
+const Glow = React.forwardRef(({ className, variant, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(glowVariants({ variant }), className)}
+    {...props}
+  >
     <div
-      ref={ref}
-      className={cn(glowVariants({ variant }), className)}
-      {...props}
-    >
-      <div
-        className={cn(
-          "absolute left-1/2 h-[256px] w-[60%] -translate-x-1/2 scale-[2.5] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(239_84%_67%/.5)_10%,_hsl(239_84%_67%/0)_60%)] sm:h-[512px]",
-          variant === "center" && "-translate-y-1/2",
-        )}
-      />
-      <div
-        className={cn(
-          "absolute left-1/2 h-[128px] w-[40%] -translate-x-1/2 scale-[2] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(239_84%_67%/.3)_10%,_hsl(239_84%_67%/0)_60%)] sm:h-[256px]",
-          variant === "center" && "-translate-y-1/2",
-        )}
-      />
-    </div>
-  )
-);
+      className={cn(
+        "absolute left-1/2 h-[256px] w-[60%] -translate-x-1/2 scale-[2.5] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(239_84%_67%/.5)_10%,_hsl(239_84%_67%/0)_60%)] sm:h-[512px]",
+        variant === "center" && "-translate-y-1/2"
+      )}
+    />
+    <div
+      className={cn(
+        "absolute left-1/2 h-[128px] w-[40%] -translate-x-1/2 scale-[2] rounded-[50%] bg-[radial-gradient(ellipse_at_center,_hsl(239_84%_67%/.3)_10%,_hsl(239_84%_67%/0)_60%)] sm:h-[256px]",
+        variant === "center" && "-translate-y-1/2"
+      )}
+    />
+  </div>
+));
 Glow.displayName = "Glow";
 
 // Mockup Components
@@ -67,18 +74,16 @@ const mockupVariants = cva(
     defaultVariants: {
       type: "responsive",
     },
-  },
+  }
 );
 
-const Mockup = React.forwardRef(
-  ({ className, type, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(mockupVariants({ type, className }))}
-      {...props}
-    />
-  ),
-);
+const Mockup = React.forwardRef(({ className, type, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(mockupVariants({ type, className }))}
+    {...props}
+  />
+));
 Mockup.displayName = "Mockup";
 
 const frameVariants = cva(
@@ -93,18 +98,16 @@ const frameVariants = cva(
     defaultVariants: {
       size: "small",
     },
-  },
+  }
 );
 
-const MockupFrame = React.forwardRef(
-  ({ className, size, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(frameVariants({ size, className }))}
-      {...props}
-    />
-  ),
-);
+const MockupFrame = React.forwardRef(({ className, size, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(frameVariants({ size, className }))}
+    {...props}
+  />
+));
 MockupFrame.displayName = "MockupFrame";
 
 //   return (
@@ -134,12 +137,12 @@ MockupFrame.displayName = "MockupFrame";
 
 //           {/* Desktop Auth */}
 //           <div className="hidden md:flex items-center space-x-4">
-//             <Link to='/signin'> 
+//             <Link to='/signin'>
 //             <Button variant="ghost" size="sm" className="text-white  hover:text-indigo-600" >
 //               Login
 //             </Button>
 //              </Link>
-            
+
 //           </div>
 
 //           {/* Mobile Menu Button */}
@@ -168,8 +171,7 @@ MockupFrame.displayName = "MockupFrame";
 //                 <Link to='/signin'>
 //                 <Button variant="ghost" size="sm" className="w-full justify-start" >Login</Button>
 //                 </Link>
-                
-                 
+
 //               </div>
 //             </div>
 //           </div>
@@ -190,7 +192,9 @@ const DashboardMockup = () => {
           <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
         </div>
-        <div className="text-xs text-muted-foreground">CodeTracker Pro Dashboard</div>
+        <div className="text-xs text-muted-foreground">
+          CodeTracker Pro Dashboard
+        </div>
         <div className="w-16"></div>
       </div>
 
@@ -231,18 +235,34 @@ const DashboardMockup = () => {
           <div className="text-sm font-medium">Recent Submissions</div>
           {[
             { platform: "LeetCode", problem: "Two Sum", status: "Accepted" },
-            { platform: "Codeforces", problem: "A+B Problem", status: "Accepted" },
-            { platform: "LeetCode", problem: "Valid Parentheses", status: "Accepted" },
+            {
+              platform: "Codeforces",
+              problem: "A+B Problem",
+              status: "Accepted",
+            },
+            {
+              platform: "LeetCode",
+              problem: "Valid Parentheses",
+              status: "Accepted",
+            },
           ].map((item, i) => (
-            <div key={i} className="flex items-center justify-between p-3 bg-muted/20 rounded-lg border border-border">
+            <div
+              key={i}
+              className="flex items-center justify-between p-3 bg-muted/20 rounded-lg border border-border"
+            >
               <div className="flex items-center space-x-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <div>
                   <div className="text-sm font-medium">{item.problem}</div>
-                  <div className="text-xs text-muted-foreground">{item.platform}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {item.platform}
+                  </div>
                 </div>
               </div>
-              <Badge variant="outline" className="text-xs bg-green-500/10 text-green-600 border-green-200">
+              <Badge
+                variant="outline"
+                className="text-xs bg-green-500/10 text-green-600 border-green-200"
+              >
                 {item.status}
               </Badge>
             </div>
@@ -268,21 +288,31 @@ const ExtensionMockup = () => {
       {/* Extension Content */}
       <div className="p-4 space-y-4">
         <div className="text-center">
-          <div className="text-lg font-bold text-green-600">Problem Solved! 🎉</div>
+          <div className="text-lg font-bold text-green-600">
+            Problem Solved! 🎉
+          </div>
           <div className="text-sm text-muted-foreground">Two Sum - Easy</div>
         </div>
 
         <div className="bg-muted/20 p-3 rounded-lg">
-          <div className="text-xs text-muted-foreground mb-2">Today's Progress</div>
+          <div className="text-xs text-muted-foreground mb-2">
+            Today's Progress
+          </div>
           <div className="flex items-center space-x-2">
             <div className="flex-1 bg-muted rounded-full h-2">
-              <div className="bg-gradient-to-r from-indigo-500 to-violet-600 h-2 rounded-full" style={{ width: '60%' }}></div>
+              <div
+                className="bg-gradient-to-r from-indigo-500 to-violet-600 h-2 rounded-full"
+                style={{ width: "60%" }}
+              ></div>
             </div>
             <span className="text-xs font-medium">3/5</span>
           </div>
         </div>
 
-        <Button size="sm" className="w-full bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700">
+        <Button
+          size="sm"
+          className="w-full bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700"
+        >
           View Dashboard
         </Button>
       </div>
@@ -311,14 +341,16 @@ const CodeTrackerHero = ({
     <div className="relative min-h-screen  overflow-hidden ">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br  z-0" />
-      
+
       <div className="relative z-10 pt-16 pb-20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
             {/* Badge */}
             <div className="mb-8 inline-flex items-center rounded-full bg-indigo-50 dark:bg-indigo-950/50 px-4 py-2 text-sm border border-indigo-200 dark:border-indigo-800">
               <Target className="mr-2 h-4 w-4 text-indigo-600" />
-              <span className="text-indigo-700 dark:text-indigo-300">Goal Tracking & Browser Extension</span>
+              <span className="text-indigo-700 dark:text-indigo-300">
+                Goal Tracking & Browser Extension
+              </span>
             </div>
 
             {/* Main Heading */}
@@ -334,9 +366,9 @@ const CodeTrackerHero = ({
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"> 
-              <Button 
-                size="lg" 
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+              <Button
+                size="lg"
                 className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white shadow-lg"
                 asChild
               >
@@ -345,8 +377,8 @@ const CodeTrackerHero = ({
                   Getting Started
                 </Link>
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="lg"
                 className="border-indigo-200 text-indigo-700 hover:bg-indigo-50 dark:border-indigo-800 dark:text-indigo-300 dark:hover:bg-indigo-950/50"
                 asChild
@@ -365,8 +397,12 @@ const CodeTrackerHero = ({
                   <Target className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
-                  <h3 className="font-semibold text-foreground mb-2">Goal Tracking</h3>
-                  <p className="text-sm text-muted-foreground">Set your daily coding goal and get reminded to complete it.</p>
+                  <h3 className="font-semibold text-foreground mb-2">
+                    Goal Tracking
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Set your daily coding goal and get reminded to complete it.
+                  </p>
                 </div>
               </div>
               <div className="flex items-start space-x-4 p-6 bg-white/50 dark:bg-white/5 rounded-xl border border-indigo-100 dark:border-indigo-900/50">
@@ -374,13 +410,17 @@ const CodeTrackerHero = ({
                   <Chrome className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
-                  <h3 className="font-semibold text-foreground mb-2">Browser Extension</h3>
-                  <p className="text-sm text-muted-foreground">Automatically log your submissions using our Chrome extension.</p>
+                  <h3 className="font-semibold text-foreground mb-2">
+                    Browser Extension
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Automatically log your submissions using our Chrome
+                    extension.
+                  </p>
                 </div>
               </div>
             </div>
 
-            {/* Mockup Section */}
             <div className="relative">
               <MockupFrame size="large" className="mx-auto max-w-6xl">
                 <Mockup type="responsive" className="w-full">
@@ -396,14 +436,12 @@ const CodeTrackerHero = ({
                   </div>
                 </Mockup>
               </MockupFrame>
-
-              {/* Background Glow */}
-              {/* <Glow variant="center" className="opacity-60" /> */}
             </div>
           </div>
         </div>
       </div>
-      <Features className=" relative z-10"/>
+      <Features className=" relative z-10" />
+      <Extension />
     </div>
   );
 };

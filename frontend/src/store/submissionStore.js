@@ -16,7 +16,7 @@ export const useSubmissionStore = create((set) => ({
         set({ isLoading: true });
         try {
             const res = await axiosInstance.get("/submission/all");
-            console.log("Fetched submissions:", res.data);
+           // console.log("Fetched submissions:", res.data);
             set({ submissions: res.data });
         } catch (error) {
             console.error("Error fetching submissions:", error);
@@ -29,10 +29,10 @@ export const useSubmissionStore = create((set) => ({
         set({setIsCreateModalOpen: true});
 
         set({ isCreating: true });
-        console.log(formData)
+      //  console.log(formData)
         try {
             const res = await axiosInstance.post("/submission/create", formData);
-            console.log("Created submission:", res.data);
+           // console.log("Created submission:", res.data);
             set((state) => ({
                 submissions: [res.data.submission, ...state.submissions],
             }));
@@ -50,7 +50,7 @@ export const useSubmissionStore = create((set) => ({
         set({ isEditing: true });
         try {
             const res = await axiosInstance.patch(`/submission/edit/${submissionId}`, formData);
-            console.log("Updated submission:", res.data);
+           // console.log("Updated submission:", res.data);
             set((state) => ({
                 submissions: state.submissions.map((sub) =>
                     sub._id === submissionId ? res.data.submission : sub
@@ -80,7 +80,7 @@ export const useSubmissionStore = create((set) => ({
         set({ isLoading: true });
         try {
             const res = await axiosInstance.get(`/submission/search?query=${query}`);
-            console.log("Searched submissions:", res.data);
+            //console.log("Searched submissions:", res.data);
             set({ submissions: res.data });
         } catch (error) {
             console.error("Error searching submissions:", error);

@@ -2,33 +2,34 @@
 
 import * as React from "react";
 import { useState } from "react";
-import {  useAuthStore } from "../store/useAuthStore.js";
+import { useAuthStore } from "../store/useAuthStore.js";
 const SignUp = () => {
-    const { signup } = useAuthStore();
-   const [formData, setFormData] = useState({
+  const { signup } = useAuthStore();
+  const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
-   const validateForm = () => {
+  const validateForm = () => {
     // if (!formData.name.trim()) return toast.error("Full name is required");
     // if (!formData.email.trim()) return toast.error("Email is required");
     // if(!formData.displayName.trim()) toast.error("display name ");
-    
-    if (!/\S+@\S+\.\S+/.test(formData.email)) return toast.error("Invalid email format");
+
+    if (!/\S+@\S+\.\S+/.test(formData.email))
+      return toast.error("Invalid email format");
     if (!formData.password) return toast.error("Password is required");
-    if (formData.password.length < 6) return toast.error("Password must be at least 6 characters");
+    if (formData.password.length < 6)
+      return toast.error("Password must be at least 6 characters");
     return true;
   };
-    const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     const success = validateForm();
-console.log("Form Data:", formData);
-console.log("Validation Success:", success);
+   // console.log("Form Data:", formData);
+   // console.log("Validation Success:", success);
     if (success === true) signup(formData);
   };
-
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#150b2d] px-4 py-16 w-full relative">
@@ -50,24 +51,28 @@ console.log("Validation Success:", success);
               type="email"
               value={formData.email}
               className="w-full px-5 py-3 rounded-xl border border-[#805ad5]/20 bg-white/5 text-white placeholder-white/60 text-base focus:outline-none focus:ring-2 focus:ring-[#a991ff] transition"
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
             <input
               placeholder="Username"
               type="text"
               value={formData.username}
               className="w-full px-5 py-3 rounded-xl border border-[#805ad5]/20 bg-white/5 text-white placeholder-white/60 text-base focus:outline-none focus:ring-2 focus:ring-[#a991ff] transition"
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
             />
             <input
               placeholder="Password"
               type="password"
               value={formData.password}
               className="w-full px-5 py-3 rounded-xl border border-[#805ad5]/20 bg-white/5 text-white placeholder-white/60 text-base focus:outline-none focus:ring-2 focus:ring-[#a991ff] transition"
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
             />
-            
-            
           </div>
           <button
             onClick={handleSubmit}
@@ -133,4 +138,4 @@ console.log("Validation Success:", success);
   );
 };
 
-export default SignUp ;
+export default SignUp;

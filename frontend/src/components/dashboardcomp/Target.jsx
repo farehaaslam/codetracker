@@ -21,7 +21,7 @@ const Target = () => {
     }
     async function handleResetToDefault(){
         setInputValue(3)
-        console.log(inputValue)
+       // console.log(inputValue)
         await changeTarget(3)
         setIsEditting(false)
 

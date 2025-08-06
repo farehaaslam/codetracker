@@ -74,13 +74,13 @@ setIsEditting:(some)=>{
   },
   changeTarget: async (target) => {
     set({ isEditting: true });
-    console.log("new tar to change",target)
+  //  console.log("new tar to change",target)
     try {
       const res = await axiosInstance.patch("/user/updatetarget",{ target});
-      console.log(res.data)
+     // console.log(res.data)
       const updatedTarget = res.data;
       set({ currentTarget: updatedTarget });
-      console.log("Successfully updated target:", updatedTarget);
+     // console.log("Successfully updated target:", updatedTarget);
     } catch (error) {
       console.error("Error updating target:", error);
       toast.error("Error updating target");

@@ -20,15 +20,12 @@ useEffect(() => {
   checkAuth();
 }, [checkAuth]);
 
-console.log("Auth User:", authUser);
+//console.log("Auth User:", authUser);
   return (
     < div className='dark min-h-screen'>
       <Routes>
-        {/* Public Home */}
         <Route path="/" element={<Layout />}>
           <Route index element={!authUser ? <CodeTrackerHero /> : <Navigate to="/dashboard" replace />} />
-          
-          {/* Auth Routes */}
           <Route
             path="signin"
             element={!authUser ? <Signin /> : <Navigate to="/dashboard" replace />}
@@ -39,8 +36,6 @@ console.log("Auth User:", authUser);
           />
            <Route path="extension" element={<Extension />} />
           <Route path="feature" element={<Features />} />
-
-          {/* Protected Routes */}
           {authUser && (
             <>
               <Route path="dashboard" element={<Dashboard />} />
@@ -49,8 +44,6 @@ console.log("Auth User:", authUser);
               <Route path="extension" element={<Extension />} />
             </>
           )}
-          
-          {/* If not logged in and tries to access protected, redirect */}
           {!authUser && (
             <>
               <Route

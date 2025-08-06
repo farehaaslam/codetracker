@@ -5,7 +5,7 @@ import  {calculateStreaks} from "../lib/streak.js";
 // creating submission
 export const createSubmission = async (req, res) => {
     const { platform, questionName, questionLink, note, topic, difficulty } = req.body;
-    const userId = req.user._id; // Assuming user ID is available in req.user
+    const userId = req.user._id; 
 console.log("Creating submission for user:", userId);
     if (!platform || !questionName) {
         return res.status(400).json({ message: "Platform and question name are required" });
@@ -34,7 +34,7 @@ console.log("Creating submission for user:", userId);
 }
 // all submission of user 
 export const getAllSubmissions = async (req, res) => {
-    const userId = req.user._id; // Assuming user ID is available in req.user
+    const userId = req.user._id; 
 
     try {
         const submissions = await Submission.find({ userId }).sort({ createdAt: -1 });
@@ -96,19 +96,19 @@ export const deleteSubmission = async (req, res) => {
 }
 //today submission
 export const getTodaySubmissions = async (req, res) => {
-    const userId = req.user._id; // Authenticated user ID
+    const userId = req.user._id;
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Today at 00:00
+    today.setHours(0, 0, 0, 0); 
 
     const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1); // Tomorrow at 00:00
+    tomorrow.setDate(tomorrow.getDate() + 1); 
 
     try {
         const submissions = await Submission.find({
             userId,
-            createdAt: { $gte: today, $lt: tomorrow } // strictly today's submissions
-        }).sort({ createdAt: -1 }); // Optional: newest first
+            createdAt: { $gte: today, $lt: tomorrow } 
+        }).sort({ createdAt: -1 }); 
 
         return res.status(200).json(submissions);
     } catch (error) {
@@ -400,7 +400,7 @@ export const getUserStreaks = async (req, res) => {
 
 
 export const todaySubmission = async (req, res) => {
-  const userId = req.user._id; // From protectRoute middleware
+  const userId = req.user._id; 
   try {
     const today = new Date();
     today.setHours(0, 0, 0, 0);

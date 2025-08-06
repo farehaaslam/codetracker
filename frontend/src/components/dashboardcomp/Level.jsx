@@ -20,7 +20,7 @@ const difficultyColors = {
   Easy: "indigo",
   Medium: "yellow",
   Hard: "blue",
-  Unknown: "var(--chart-1)" // for _id: ""
+  Unknown: "var(--chart-1)" 
 };
 
 const chartConfig = {

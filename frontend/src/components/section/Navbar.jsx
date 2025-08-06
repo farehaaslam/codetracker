@@ -60,7 +60,7 @@ const Navbar = () => {
                   className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                 >
                   <li><NavLink to="/profile" className={linkClass}>Profile</NavLink></li>
-                  <li><button  className="btn btn-ghost border-0" onClick={logout}>Logout</button></li>
+                  <li><button  className="" onClick={logout}>Logout</button></li>
                 </ul>
               </div>
             </div>
@@ -71,16 +71,6 @@ const Navbar = () => {
               </NavLink>
             </div>
           )}
-
-          {/* Mobile Menu Toggle (Optional) */}
-          {/*
-          <button
-            onClick={onMenuToggle}
-            className="md:hidden p-2 text-muted-foreground hover:text-foreground"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-          */}
         </div>
 
         {/* Mobile Menu */}
