@@ -3,17 +3,23 @@ import { NavLink } from 'react-router-dom';
 import { Button } from '../ui/button';
 import { BarChart3, Menu, X } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
-
+import { useDashboardStore } from '../../store/DashboardStore';
 const Navbar = () => {
-  const { authUser, logout } = useAuthStore();
+const authUser = useAuthStore((state) => state.authUser);
+const logout = useAuthStore((state) => state.logout);
+const isMenuOpen = useDashboardStore((state) => state.isMenuOpen);
+const setIsMenuOpen = useDashboardStore((state) => state.setIsMenuOpen);
 
+const open=()=>{
+setIsMenuOpen(true)
+}
   const linkClass = ({ isActive }) =>
     isActive
       ? 'text-indigo-500 hover:text-foreground transition-colors font-medium'
       : 'hover:text-indigo-500 transition-colors text-muted-foreground hover:text-foreground transition-colors font-medium';
 
   return (
-    <nav className="relative z-50 w-full via-background  dark:from-indigo-950/20 dark:via-background dark:to-violet-950/20">
+    <nav className="relative z-50 w-full bg-gradient-to-r via-background dark:from-indigo-950/20 dark:via-background dark:to-violet-950/20">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -44,8 +50,8 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Auth */}
-          {authUser ? (
-            <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center">
+            {authUser ? (
               <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                   <div className="w-10 rounded-full">
@@ -60,53 +66,80 @@ const Navbar = () => {
                   className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
                 >
                   <li><NavLink to="/profile" className={linkClass}>Profile</NavLink></li>
-                  <li><button  className="" onClick={logout}>Logout</button></li>
+                  <li><button onClick={logout}>Logout</button></li>
                 </ul>
               </div>
-            </div>
-          ) : (
-            <div className="pt-4 border-t border-border px-5">
+            ) : (
               <NavLink to="/signin">
-                <Button size="sm" className="w-full justify-start">Login</Button>
+                <Button size="sm">Login</Button>
               </NavLink>
-            </div>
-          )}
+            )}
+          </div>
+
+          {/* Mobile Menu Toggle */}
+          <button
+            className="md:hidden text-muted-foreground"
+            onClick={open}
+          >
+            <Menu size={24} />
+          </button>
         </div>
 
         {/* Mobile Menu */}
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-background border-b border-border shadow-lg">
-          <div className="px-6 py-4 space-y-4">
-            <ul className="flex flex-col space-y-2 text-muted-foreground font-medium">
-              {authUser ? (
-                <>
-                  <li><NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink></li>
-                  <li><NavLink to="/submission" className={linkClass}>Submission</NavLink></li>
-                  <li><NavLink to="/extension" className={linkClass}>Extension</NavLink></li>
-                </>
-              ) : (
-                <>
-                  <li><NavLink to="/" className={linkClass}>Home</NavLink></li>
-                  <li><NavLink to="/feature" className={linkClass}>Feature</NavLink></li>
-                  <li><NavLink to="/extension" className={linkClass}>Extension</NavLink></li>
-                </>
-              )}
-            </ul>
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-16 left-0 right-0 bg-background border-b border-border shadow-lg">
+            <div className="px-6 py-4 space-y-4">
+              {/* Close Button */}
+              <button
+                className="absolute top-4 right-4 text-muted-foreground"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <X size={24} />
+              </button>
 
-            {/* Mobile Logout */}
-            {authUser && (
+              <ul className="flex flex-col space-y-2 text-muted-foreground font-medium">
+                {authUser ? (
+                  <>
+                    <li><NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink></li>
+                    <li><NavLink to="/submission" className={linkClass}>Submission</NavLink></li>
+                    <li><NavLink to="/extension" className={linkClass}>Extension</NavLink></li>
+                    <li><NavLink to="/profile" className={linkClass}>Profile</NavLink></li>
+                  </>
+                ) : (
+                  <>
+                    <li><NavLink to="/" className={linkClass}>Home</NavLink></li>
+                    <li><NavLink to="/feature" className={linkClass}>Feature</NavLink></li>
+                    <li><NavLink to="/extension" className={linkClass}>Extension</NavLink></li>
+                  </>
+                )}
+              </ul>
+
+              {/* Mobile Auth */}
               <div className="pt-4 border-t border-border">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full justify-start"
-                  onClick={logout}
-                >
-                  Logout
-                </Button>
+                {authUser ? (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start"
+                    onClick={logout}
+                  >
+                    Logout
+                  </Button>
+                ) : (
+                  <NavLink to="/signin">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start"
+                    >
+                      Login
+                    </Button>
+                  </NavLink>
+                )}
               </div>
-            )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );

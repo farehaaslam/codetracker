@@ -2,17 +2,24 @@ export function calculateStreaks(submissions) {
   let currentStreak = 0;
   let longestStreak = 0;
 
-  // ✅ Step 1: Collect all unique submission dates
+  const IST_OFFSET_MINUTES = 330; // UTC+5:30
+
+  // Step 1: Normalize each submission date to IST midnight
   const dateStrings = new Set(
-    submissions.map((s) => new Date(s.createdAt).toDateString())
+    submissions.map((s) => {
+      const utcDate = new Date(s.createdAt);
+      const istDate = new Date(utcDate.getTime() + IST_OFFSET_MINUTES * 60 * 1000);
+      istDate.setHours(0, 0, 0, 0); // Set to IST midnight
+      return istDate.toISOString(); // Store as ISO to compare reliably
+    })
   );
 
-  // ✅ Step 2: Convert to sorted list of Date objects
+  // Step 2: Convert back to sorted list of Date objects
   const sortedDates = Array.from(dateStrings)
     .map((d) => new Date(d))
     .sort((a, b) => a - b);
 
-  // ✅ Step 3: Calculate longest streak
+  // Step 3: Calculate longest streak
   let streak = 1;
   for (let i = 1; i < sortedDates.length; i++) {
     const prev = sortedDates[i - 1];
@@ -30,27 +37,25 @@ export function calculateStreaks(submissions) {
     }
   }
 
-  // ✅ Step 4: Calculate current streak ending at the last submission
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Step 4: Calculate current streak ending at IST "today"
+  const now = new Date();
+  const istNow = new Date(now.getTime() + IST_OFFSET_MINUTES * 60 * 1000);
+  istNow.setHours(0, 0, 0, 0);
 
   const lastSubmission = sortedDates[sortedDates.length - 1];
-  const gap = (today - lastSubmission) / (1000 * 60 * 60 * 24);
+  const gap = (istNow - lastSubmission) / (1000 * 60 * 60 * 24);
 
-  // If user submitted today or yesterday, count back streak
   if (gap <= 1) {
     let tempStreak = 1;
     let ptr = new Date(lastSubmission);
-
-    while (dateStrings.has(ptr.toDateString())) {
+    for (;;) {
       ptr.setDate(ptr.getDate() - 1);
-      if (dateStrings.has(ptr.toDateString())) {
+      if (dateStrings.has(ptr.toISOString())) {
         tempStreak++;
       } else {
         break;
       }
     }
-
     currentStreak = tempStreak;
   } else {
     currentStreak = 0;

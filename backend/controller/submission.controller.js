@@ -400,16 +400,39 @@ export const getUserStreaks = async (req, res) => {
 
 
 export const todaySubmission = async (req, res) => {
-  const userId = req.user._id; 
+  const userId = req.user._id;
   try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    // Current UTC timestamp in milliseconds
+    const utcNowMs = new Date().getTime();
+
+    // IST offset in milliseconds (5 hours 30 minutes)
+    const IST_OFFSET_MS = 5.5 * 60 * 60 * 1000; // 19800000 ms
+
+    // Current IST timestamp in milliseconds
+    const istNowMs = utcNowMs + IST_OFFSET_MS;
+
+    // Milliseconds in a day
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    // Time of day in IST (milliseconds since IST midnight)
+    const istTimeOfDayMs = istNowMs % DAY_MS;
+
+    // IST midnight timestamp (in IST-adjusted ms)
+    const istStartMs = istNowMs - istTimeOfDayMs;
+
+    // Corresponding UTC start timestamp for IST midnight
+    const utcStartMs = istStartMs - IST_OFFSET_MS;
+
+    // UTC end timestamp (next IST midnight)
+    const utcEndMs = utcStartMs + DAY_MS;
+
+    // Create Date objects for query
+    const utcStart = new Date(utcStartMs);
+    const utcEnd = new Date(utcEndMs);
 
     const count = await Submission.countDocuments({
       userId,
-      createdAt: { $gte: today, $lt: tomorrow }
+      createdAt: { $gte: utcStart, $lt: utcEnd }
     });
 
     return res.status(200).json({ count });
@@ -418,3 +441,4 @@ export const todaySubmission = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+

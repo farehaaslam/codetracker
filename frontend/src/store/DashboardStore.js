@@ -12,6 +12,9 @@ export const useDashboardStore = create((set) => ({
   yearlySubmission:[],
   currStreak: null,
     longestStreak: null,
+  isMenuOpen: false,
+    setIsMenuOpen: (value) => set(() => ({ isMenuOpen: value })),
+
 setIsEditting:(some)=>{
   set({isEditting:some})
 },
